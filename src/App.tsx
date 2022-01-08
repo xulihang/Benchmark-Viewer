@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import ButtonAppBar from "./AppBar";
 import axios from 'axios';
 import "./App.css"
+const Diff = require("diff");
 
 function App() {
   const [rows, setRows] = useState<any[]>([]);
@@ -46,15 +47,36 @@ function App() {
     }
     setEngines(mEngines);
   }
+  
+  const getDiffElement = (ocr_result:string,ground_truth:string) => {
+    var container = document.createElement("div");
+    let diff = Diff.diffChars(ground_truth, ocr_result);
+    diff.forEach((part:any) => {
+      // green for additions, red for deletions
+      // grey for common parts
+      const color = part.added ? 'green' :
+        part.removed ? 'red' : 'black';
+      var span = document.createElement('span');
+      span.style.color = color;
+      span.appendChild(document
+        .createTextNode(part.value));
+      container.appendChild(span);
+    });
+    return container;
+  }
 
-  const getEnginesResultsOfImage = (image:any) => {
+
+  const getEnginesDiffOfImage = (image:any,ground_truth:string) => {
     let enginesDict = image.engines;
-    var result = "";
+    var container = document.createElement("div");  
     for (const engine in enginesDict) {
       let engineData = enginesDict[engine];
-      result = result + engineData.ocr_result;
+      var span = document.createElement("span");
+      span.innerText = engine+": ";
+      container.appendChild(span);
+      container.appendChild(getDiffElement(engineData["ocr_result"],ground_truth));
     }
-    return result;
+    return container.outerHTML;
   }
 
   const loadRowsFromDetails = (details:any) => {
@@ -68,7 +90,7 @@ function App() {
       row["id"] = index;
       row["image"] = imageName;
       row["ground_truth"] = image["ground_truth"];
-      row["result"] = getEnginesResultsOfImage(image);
+      row["diffs"] = getEnginesDiffOfImage(image, image["ground_truth"]);
       row["engines"] = image["engines"];
       //console.log(image);
       if (index == 1){
@@ -127,10 +149,11 @@ function App() {
                 {row.ground_truth}
               </td>
               <td>
-                {row.result}
+              <div
+                dangerouslySetInnerHTML={{__html: row.diffs }} />
               </td>
               {engines.map(engine => (
-                <th>{getEngineScoreOfImage(engine, row.engines)}</th>
+                <td>{getEngineScoreOfImage(engine, row.engines)}</td>
               ))}
             </tr>
           ))}

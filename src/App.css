@@ -1,6 +1,6 @@
 th, td {
   border: 1px solid black;
-  text-align: center;
+  text-align: left;
   max-width: 200px;
   max-height: 200px;
   overflow: auto;
