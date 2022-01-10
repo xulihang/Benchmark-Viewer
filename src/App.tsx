@@ -22,6 +22,9 @@ function App() {
   });
   
   const showResult = async () => {
+    if (project == "") {
+      alert("Please specify a project first.");
+    }
     const result = await axios(
       './projects/'+project+'/details.json',
     );
