@@ -41,11 +41,6 @@ function App() {
     
     <div>
       <ButtonAppBar/>
-      <div style={{display:"flex"}}>
-      <ScorePie chartId="Score" score={50} style={{ height: '300px', width: '50%' }}/>
-      <ScorePie chartId="Score" score={50} style={{ height: '300px', width: '50%' }}/>
-      </div>
-      
       <FormControl fullWidth margin="normal">
         <InputLabel id="demo-simple-select-label">Project</InputLabel>
         <Select

@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import { useState } from 'react';
 import axios from 'axios';
 import DataTable from './DataTable';
+import Charts from './Charts';
 const Diff = require("diff");
 
 interface TabPanelProps {
@@ -140,7 +141,7 @@ export default function NavTabs(props:any) {
         <DataTable engines={engines} rows={rows}/>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Item Two
+        <Charts/>
       </TabPanel>
       <TabPanel value={value} index={2}>
         Item Three

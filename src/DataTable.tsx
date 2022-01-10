@@ -2,9 +2,13 @@ import React from "react";
 import { useState } from "react";
 
 export default function DataTable(props:any){
-    const [rows] = useState<any[]>(props.rows);
-    const [engines] = useState<any[]>(props.engines);
-    
+    const [rows, setRows] = useState<any[]>([]);
+    const [engines, setEngines] = useState<any[]>([]);
+    React.useEffect(() => {
+        setRows(props.rows);
+        setEngines(props.engines);
+      }, [props.rows,props.engines]);
+
     const getImageURLFromName = (name:String) => {
         return './projects/' + props.project + '/' + name;
     }
