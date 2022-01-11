@@ -12,6 +12,8 @@ export default function ImageViewer(props:any) {
   const [imagename, setImagename] = useState<string>("");
   const [width, setWidth] = useState<number>(640);
   const [height, setHeight] = useState<number>(640);
+  const [groundTruth, setGroundTruth] = useState<string>("");
+  const [ocrResult, setOcrResult] = useState<string>("");
   const canvasRef = React.useRef(null)
   const overlayCanvasRef = React.useRef(null)
   useEffect(() => {
@@ -55,7 +57,6 @@ export default function ImageViewer(props:any) {
       let ratio = imageObj1.naturalWidth/imageObj1.naturalHeight;
       let new_height = width/ratio
       scale = 640/imageObj1.naturalWidth;
-      console.log("ss:"+scale);
       setHeight(new_height);
       ctx.drawImage(imageObj1,0,0,640,new_height);
     }
@@ -128,21 +129,29 @@ export default function ImageViewer(props:any) {
           </Select>
         </FormControl>
         <div>
-        <canvas
-            ref={canvasRef}
-            width={width}
-            height={height}
-            style={{position:"absolute"}}
-          />
-        <canvas
-            ref={overlayCanvasRef}
-            width={width}
-            height={height}
-            style={{position:"absolute"}}
-            id="overlay-canvas"
-          />
-
-
+          <div style={{height:height}}>
+            <canvas
+                ref={canvasRef}
+                width={width}
+                height={height}
+                style={{position:"absolute"}}
+              />
+            <canvas
+                ref={overlayCanvasRef}
+                width={width}
+                height={height}
+                style={{position:"absolute"}}
+                id="overlay-canvas"
+              />
+          </div>
+          <div>
+            <div>
+              <p>Ground Truth:</p>
+              <p>{groundTruth}</p>
+              <p>OCR Result:</p>
+              <p>{ocrResult}</p>
+            </div>
+          </div>
         </div>
       </div>
   )

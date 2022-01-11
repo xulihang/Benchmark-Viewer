@@ -23,8 +23,6 @@ function App() {
   useEffect(() => {
     loadProjectsInfo();
   }, []);
-
-  
   
   const showResult = async () => {
     if (selectedProject == "") {
