@@ -54,7 +54,7 @@ export default function DataTable(props:any){
         for (const engine in enginesDict) {
             let engineData = enginesDict[engine];
             var span = document.createElement("span");
-            span.innerText = engine+": ";
+            span.innerHTML = "<strong>"+engine+": <strong/>";
             container.appendChild(span);
             container.appendChild(getDiffElement(engineData["ocr_result"],ground_truth));
         }
