@@ -6,7 +6,19 @@ import { useState } from 'react';
 import DataTable from './DataTable';
 import Charts from './Charts';
 import ImageViewer from './ImageViewer';
+import { Modal } from '@mui/material';
 
+const modalStyle = {
+  position: 'absolute' as 'absolute',
+  top: 0,
+  left: '5%',
+  width: '80%',
+  height: '100%',
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -45,6 +57,8 @@ export default function NavTabs(props:any) {
   const [value, setValue] = useState(0);
   const [project, setProject] = useState("");
   const [imagename, setImagename] = useState("");
+  const [open, setOpen] = useState(false);
+  const handleClose = () => setOpen(false);
 
   React.useEffect(() => {
     setProject(props.project);
@@ -57,7 +71,7 @@ export default function NavTabs(props:any) {
   const handleClick = (event:any) => {
     console.log(event.target.innerText);
     setImagename(event.target.innerText);
-    setValue(2);
+    setOpen(true)
   }
 
   return (
@@ -66,7 +80,6 @@ export default function NavTabs(props:any) {
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           <Tab label="Details" {...a11yProps(0)} />
           <Tab label="Charts" {...a11yProps(1)} />
-          <Tab label="Image" {...a11yProps(2)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
@@ -75,9 +88,11 @@ export default function NavTabs(props:any) {
       <TabPanel value={value} index={1}>
         <Charts project={project}/>
       </TabPanel>
-      <TabPanel value={value} index={2}>
-        <ImageViewer project={project} imagename={imagename}/>
-      </TabPanel>
+      <Modal open={open} onClose={handleClose}>
+        <Box sx={modalStyle}>
+          <ImageViewer project={project} imagename={imagename}/>
+        </Box>
+      </Modal>
     </Box>
   );
 }
