@@ -65,7 +65,7 @@ export default function NavTabs(props:any) {
         <DataTable project={project}/>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <Charts/>
+        <Charts project={project}/>
       </TabPanel>
       <TabPanel value={value} index={2}>
         Item Three
