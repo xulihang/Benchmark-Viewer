@@ -7,18 +7,7 @@ import DataTable from './DataTable';
 import Charts from './Charts';
 import ImageViewer from './ImageViewer';
 import { Modal } from '@mui/material';
-
-const modalStyle = {
-  position: 'absolute' as 'absolute',
-  top: 0,
-  left: '5%',
-  width: '80%',
-  height: '100%',
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
+import "./modalBox.css"
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -89,7 +78,7 @@ export default function NavTabs(props:any) {
         <Charts project={project}/>
       </TabPanel>
       <Modal open={open} onClose={handleClose}>
-        <Box sx={modalStyle}>
+        <Box id="modalBox">
           <ImageViewer project={project} imagename={imagename}/>
         </Box>
       </Modal>
