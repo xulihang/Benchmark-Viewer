@@ -6,6 +6,7 @@ const Diff = require("diff");
 export default function DataTable(props:any){
     const [rows, setRows] = useState<any[]>([]);
     const [engines, setEngines] = useState<any[]>([]);
+    const imageViewer = props.imageViewer;
 
     React.useEffect(() => {
         console.log(props.project)
@@ -76,16 +77,11 @@ export default function DataTable(props:any){
             row["engines"] = image["engines"];
             //console.log(image);
             if (index == 1){
-            loadEnginesFromImage(image);
+                loadEnginesFromImage(image);
             }
             mRows.push(row);
         }
         setRows(mRows);
-    }
-
-    
-    const getImageURLFromName = (name:String) => {
-        return './projects/' + props.project + '/' + name;
     }
     
     const getEngineScoreOfImage = (engine:string, engines:any) => {
@@ -113,7 +109,7 @@ export default function DataTable(props:any){
                 <tr key={row.id}>
                 <td>{row.id}</td>
                 <td>
-                    <a href={getImageURLFromName(row.image)} target="_blank" >{row.image}</a>
+                    <div style={{textDecoration:"underline",cursor:"pointer"}} onClick={props.handleClick}>{row.image}</div>
                 </td>
                 <td>
                     {row.ground_truth}

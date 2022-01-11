@@ -44,6 +44,7 @@ function a11yProps(index: number) {
 export default function NavTabs(props:any) {
   const [value, setValue] = useState(0);
   const [project, setProject] = useState("");
+  const [imagename, setImagename] = useState("");
 
   React.useEffect(() => {
     setProject(props.project);
@@ -52,6 +53,12 @@ export default function NavTabs(props:any) {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
+
+  const handleClick = (event:any) => {
+    console.log(event.target.innerText);
+    setImagename(event.target.innerText);
+    setValue(2);
+  }
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -63,13 +70,13 @@ export default function NavTabs(props:any) {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <DataTable project={project}/>
+        <DataTable project={project} handleClick={handleClick}/>
       </TabPanel>
       <TabPanel value={value} index={1}>
         <Charts project={project}/>
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <ImageViewer/>
+        <ImageViewer project={project} imagename={imagename}/>
       </TabPanel>
     </Box>
   );
