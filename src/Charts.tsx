@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import LineBar from "./LineBar";
 import ScorePie from "./ScorePie";
 
 export default function Charts(props:any){
@@ -20,6 +21,7 @@ export default function Charts(props:any){
           let engineDict = result.data[engine];
           engineDict["name"] = engine;
           engineDict["score"] = (engineDict["score"]*100).toFixed(2);
+          engineDict["average_time"] = parseInt(engineDict["average_time"]);
           enginesArray.push(engineDict);
       }
       console.log(enginesArray);
@@ -29,6 +31,12 @@ export default function Charts(props:any){
 
   return (
     <div>
+        <div>
+          <LineBar dataKey="score" enginesArray={engines} />
+        </div>
+        <div>
+          <LineBar dataKey="average_time" enginesArray={engines} />
+        </div>
         {engines.map(engine => (
           <div>{engine.name}:
             <div style={{display:"flex"}}>
