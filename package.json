@@ -18,6 +18,7 @@
     "diff": "^5.0.0",
     "echarts": "^5.2.2",
     "echarts-for-react": "^3.0.2",
+    "mrz-parser-js": "^1.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "5.0.0",
@@ -47,5 +48,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "devDependencies": {}
 }

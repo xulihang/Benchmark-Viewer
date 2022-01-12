@@ -109,7 +109,7 @@ export default function DataTable(props:any){
                 <tr key={row.id}>
                 <td>{row.id}</td>
                 <td>
-                    <div style={{textDecoration:"underline",cursor:"pointer"}} onClick={props.handleClick}>{row.image}</div>
+                    <div ground-truth={row.ground_truth} style={{textDecoration:"underline",cursor:"pointer"}} onClick={props.handleClick}>{row.image}</div>
                 </td>
                 <td>
                     {row.ground_truth}

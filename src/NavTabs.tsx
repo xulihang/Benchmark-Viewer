@@ -46,6 +46,7 @@ export default function NavTabs(props:any) {
   const [value, setValue] = useState(0);
   const [project, setProject] = useState("");
   const [imagename, setImagename] = useState("");
+  const [groundTruth, setGroundTruth] = useState("");
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
 
@@ -58,7 +59,9 @@ export default function NavTabs(props:any) {
   };
 
   const handleClick = (event:any) => {
+    console.log(event.target);
     console.log(event.target.innerText);
+    setGroundTruth(event.target.getAttribute("ground-truth"));
     setImagename(event.target.innerText);
     setOpen(true)
   }
@@ -79,7 +82,7 @@ export default function NavTabs(props:any) {
       </TabPanel>
       <Modal open={open} onClose={handleClose}>
         <Box id="modalBox">
-          <ImageViewer project={project} imagename={imagename}/>
+          <ImageViewer project={project} imagename={imagename} groundTruth={groundTruth}/>
         </Box>
       </Modal>
     </Box>

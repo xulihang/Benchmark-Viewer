@@ -2,6 +2,8 @@ import { FormControl, InputLabel, Select, MenuItem, Checkbox, FormControlLabel, 
 import axios from "axios";
 import React from "react";
 import { useEffect, useState } from "react";
+import CharsDiff from "./CharsDiff";
+import MRZTable from "./MRZTable";
 
 let scale:number = 1;
 
@@ -10,16 +12,18 @@ export default function ImageViewer(props:any) {
   const [raw, setRaw] = useState<boolean>(false);
   const [selectedEngine, setSelectedEngine] = useState<string>("");
   const [imagename, setImagename] = useState<string>("");
-  const [width, setWidth] = useState<number>(640);
-  const [height, setHeight] = useState<number>(640);
+  const [width, setWidth] = useState<number>(480);
+  const [height, setHeight] = useState<number>(480);
   const [groundTruth, setGroundTruth] = useState<string>("");
   const [ocrResult, setOcrResult] = useState<string>("");
   const canvasRef = React.useRef(null)
   const overlayCanvasRef = React.useRef(null)
+
   useEffect(() => {
     loadEngines();
     if (!!props.imagename){
       setImagename(props.imagename);
+      setGroundTruth(props.groundTruth);
       drawImage();
     }
     
@@ -45,7 +49,8 @@ export default function ImageViewer(props:any) {
   const onEngineSelected = (event:any) => {
     let engine = event.target.value;
     setSelectedEngine(engine);
-    drawOverlays(engine,raw);
+    showResult(engine,raw);
+    
   }
 
   const drawImage = () => {
@@ -56,34 +61,16 @@ export default function ImageViewer(props:any) {
       console.log(imageObj1);
       let ratio = imageObj1.naturalWidth/imageObj1.naturalHeight;
       let new_height = width/ratio
-      scale = 640/imageObj1.naturalWidth;
+      scale = 480/imageObj1.naturalWidth;
       setHeight(new_height);
-      ctx.drawImage(imageObj1,0,0,640,new_height);
+      ctx.drawImage(imageObj1,0,0,480,new_height);
     }
     let url = getImageURLFromName(props.imagename)
     console.log(url);
     imageObj1.src = url;
   }
 
-  const drawOverlays = async (engine:string,drawRaw?:boolean) => {
-    if (!props.imagename){
-      return;
-    }
-    const result = await axios(
-      './projects/'+props.project+'/'+getFilenameWithoutExtenstion()+'-'+engine+'.json',
-    );
-    console.log(result.data);
-    let boxes;
-    if (drawRaw == true){
-      if ("raw_boxes" in result.data){
-        boxes=result.data.raw_boxes;
-      }else{
-        boxes=result.data.boxes;
-      }
-    } else {
-      boxes=result.data.boxes;
-    }
-    console.log(boxes);
+  const drawOverlays = (boxes:any[]) => {
     const canvas:any = overlayCanvasRef.current;
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -108,7 +95,34 @@ export default function ImageViewer(props:any) {
   
   const onRawChecked = (event:any) => {
     setRaw(event.target.checked);
-    drawOverlays(selectedEngine,event.target.checked);
+    showResult(selectedEngine,event.target.checked);
+  }
+
+  const showResult = async (engine:string, raw:boolean) => {
+    if (!props.imagename){
+      return;
+    }
+    const result = await axios(
+      './projects/'+props.project+'/'+getFilenameWithoutExtenstion()+'-'+engine+'.json',
+    );
+    let boxes;
+    if (raw == true){
+      if ("raw_boxes" in result.data){
+        boxes=result.data.raw_boxes;
+      }else{
+        boxes=result.data.boxes;
+      }
+    } else {
+      boxes=result.data.boxes;
+    }
+
+    console.log(boxes);
+    drawOverlays(boxes);
+    let resultString = "";
+    for (var i=0;i<boxes.length;i++){
+        resultString = resultString + boxes[i].text + "\n";
+    }
+    setOcrResult(resultString);
   }
 
   return (
@@ -145,11 +159,17 @@ export default function ImageViewer(props:any) {
               />
           </div>
           <div>
-            <div>
+            <div style={{fontSize:"large"}}>
               <p>Ground Truth:</p>
-              <p>{groundTruth}</p>
+              <pre>{groundTruth}</pre>
+              <p>Diff</p>
+              <CharsDiff str1={groundTruth} str2={ocrResult}/>
               <p>OCR Result:</p>
-              <p>{ocrResult}</p>
+              <pre>{ocrResult}</pre>
+            </div>
+            <div>
+              <h2>Parsed</h2>
+              <MRZTable OCRResult={ocrResult}/>
             </div>
           </div>
         </div>
