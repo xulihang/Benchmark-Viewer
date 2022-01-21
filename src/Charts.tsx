@@ -21,6 +21,7 @@ export default function Charts(props:any){
           let engineDict = result.data[engine];
           engineDict["name"] = engine;
           engineDict["score"] = (engineDict["score"]*100).toFixed(2);
+          engineDict["exact_rate"] = (engineDict["exact_rate"]*100).toFixed(2);
           engineDict["average_time"] = parseInt(engineDict["average_time"]);
           enginesArray.push(engineDict);
       }
@@ -35,16 +36,32 @@ export default function Charts(props:any){
           <LineBar dataKey="score" enginesArray={engines} />
         </div>
         <div>
+          <LineBar dataKey="exact_rate" enginesArray={engines} />
+        </div>
+        <div>
           <LineBar dataKey="average_time" enginesArray={engines} />
         </div>
-        {engines.map(engine => (
-          <div>{engine.name}:
-            <div style={{display:"flex"}}>
-              <ScorePie chartId="Score" score={engine.score} style={{ height: '300px', width: '50%' }}/>
+        <div>
+          <h2>Score</h2>
+          {engines.map(engine => (
+            <div>{engine.name}:
+              <div style={{display:"flex"}}>
+                <ScorePie chartId="Score" score={engine.score} style={{ height: '300px', width: '50%' }}/>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+          <h2>Exact Rate</h2>
+          {engines.map(engine => (
+            <div>{engine.name}:
+              <div style={{display:"flex"}}>
+                <ScorePie chartId="Exact Rate" score={engine.exact_rate} style={{ height: '300px', width: '50%' }}/>
+              </div>
+            </div>
+          ))}
+        </div>
+        
     </div>
   )
 }
+
 
